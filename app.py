@@ -87,9 +87,21 @@ def load_data():
             sup_win_rates[champ] = win_rates[champ]
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
+def get_player_name(playerID):
+    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/{}/name?api_key=RGAPI-bed8d7c5-334d-40b5-8807-5fa186553d2c".format((str)(playerID))
+    try:
+        data = urllib2.urlopen(url, timeout=12)
+        statusCode = data.getcode()
+        if statusCode == 200:
+            page = data.read()
+            content = json.loads(page)
+            name = content[str(playerID)]
+            return name
+    except:
+        return 'StupidYou'
 
 def get_player_id(playerName):
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/{}?api_key=RGAPI-bed8d7c5-334d-40b5-8807-5fa186553d2c".format(playerName)
+    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/{}?api_key=RGAPI-55787ebf-c932-4185-8a30-da566a0d0ce6".format(playerName)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -286,8 +298,13 @@ def show_result():
             top_5_champ_names = []
             champ_select_suggestions = {}
             aram_champ_select_suggestions = {}
-            load_data()
+            # load_data()
             playerName = request.form.get('playerName')
+            player_name = ''
+            for x in playerName.split():
+                player_name += x
+            playerName = player_name
+
             playerID = get_player_id(playerName)
             get_top_5_champs(playerID)
             top_5_list = get_champion_names()
@@ -300,8 +317,10 @@ def show_result():
             for x in player_name_list:
                 name_with_space += (x + '+')
             name_with_space = name_with_space[:-1]
+            playerName = get_player_name(playerID)
             return render_template('result.html', player_name=playerName, name_with_space=name_with_space, champs=champs,aram_champs=aram_champs, lane=lane,lis=lis, aram_lis = aram_lis,top_5_list=top_5_list)
         except:
             return "Wrong player name, please try again!"
+
 if __name__ == '__main__':
-    app.run(debug=app.config['DEBUG'], port=4990)
+    app.run(debug=True,port=5080)
