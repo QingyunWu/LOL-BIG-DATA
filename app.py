@@ -262,7 +262,7 @@ def make_suggestions(lane):
     print string
     return (lis, aram_lis)
     
-@app.route('/index')
+@app.route('/')
 def index():
     load_data()
     return render_template('index.html')
@@ -304,4 +304,4 @@ def show_result():
         except:
             return "Wrong player name, please try again!"
 if __name__ == '__main__':
-    app.run(debug=True,port=5080)
+    app.run(debug=app.config['DEBUG'], port=4990)
