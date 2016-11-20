@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <style>
         body {
             background-color: #FFFFF0;
@@ -26,6 +28,10 @@
             text-align: center;
             font-size: Georgia;
         }
+        div {
+            height:75%;
+            width:75%;
+        }
     </style>
 </head>
 <body>
@@ -33,7 +39,7 @@
                         <span class="label">PlayerName</span>
                         <span class="glyphicon glyphicon-user"></span>
                         <input type="text" name="playerName" placeholder="name"></input>
-  						<input type="submit" name="Search" value="Search" class="btn btn-success"></input>
+              <input type="submit" name="Search" value="Search" class="btn btn-success"></input>
 </form>
 
 
@@ -79,6 +85,11 @@
       </tr>
     </tbody>
   </table>
+</div>
+<div class="container">
+  <div>
+    <canvas id="radar"></canvas>
+  </div>
 </div>
 <div class="alert alert-success">
      From our analysis, you are a <strong>{{lane}}</strong> player!
@@ -156,5 +167,47 @@
 <img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[1]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
 <img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[2]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
 
+<script type="text/javascript">
+  var list = "{{ pointsList[0]}}"
+
+  var ctx5 = document.getElementById("radar");
+
+  var myRadarChart = new Chart(ctx5, {
+    type: 'radar',
+    data: {
+    labels: ["MIDDLE", "TOP",  "BOT", "JUNGLE", "SUPPORT"],
+    datasets: [
+        {
+            label: "Lane Champion Points",
+            backgroundColor: "rgba(255,51,51,0.6)",
+            borderColor: "rgba(179,181,198,1)",
+            pointBackgroundColor: "rgba(179,181,198,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgba(179,181,198,1)",
+            data: ["{{ pointsList[0]}}", "{{ pointsList[1]}}", "{{ pointsList[2]}}", "{{ pointsList[3]}}", "{{ pointsList[4]}}"]
+        }
+    ]
+},
+
+    options: {
+    elements: {
+        rectangle: {
+            borderWidth: 2,
+        }
+    },
+    responsive: true,
+
+    legend: {
+        position: 'right',
+    },
+    title: {
+        display: true,
+        text: 'Lane Preference'
+    }
+
+}
+});
+</script>
 </body>
 </html>

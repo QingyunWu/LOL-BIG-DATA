@@ -31,6 +31,7 @@ aram_mid_win_rates = {}
 aram_bot_win_rates = {}
 aram_jug_win_rates = {}
 aram_sup_win_rates = {}
+pointsList = []
 
 # top 10 for that lane
 top_10_win_rate_champs = {}
@@ -113,36 +114,6 @@ def get_player_id(playerName):
     except:
         return 'Wrong name!'
 
-def get_lane_of_the_player():
-    top_points = 0
-    jug_points = 0
-    bot_points = 0
-    mid_points = 0
-    sup_points = 0
-    for x in top_5_champs:
-        if x[0] in TOP:
-            top_points += x[1]
-        elif x[0] in JUNGLE:
-            jug_points += x[1]
-        elif x[0] in BOTTOM:
-            bot_points += x[1]
-        elif x[0] in MIDDLE:
-            mid_points += x[1]
-        elif x[0] in SUPPORT:
-            sup_points += x[1]
-    max_pints = 0
-    max_points = max(top_points, jug_points, bot_points, mid_points, sup_points)
-
-    if mid_points == max_points:
-        return "middle lane"
-    elif top_points == max_points:
-        return "top lane"
-    elif bot_points == max_points:
-        return "bottom lane"
-    elif jug_points == max_points:
-        return "jungle lane"
-    elif sup_points == max_points:
-        return "support"
 
 def get_top_5_champs(playerID):
     url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key=RGAPI-947ba119-a421-421d-9f9c-3699d5bb938e".format(playerID)
@@ -155,13 +126,46 @@ def get_top_5_champs(playerID):
             for dic in content:
                 player_champ_points[dic['championId']] = dic['championPoints']
     except:
-        return 'StupidYou'
+        return 'error'
     sorted_by_value = OrderedDict(reversed(sorted(player_champ_points.items(), key=lambda x: x[1])))
     index = 0
     for x in sorted_by_value.items():
         if index < 5:
             top_5_champs.append(x)
         index += 1
+    # make a list here, 0-5 means mid, top, bot, jug, sup, preference
+    result = [0,0,0,0,0,"whatever"]    
+    for x in player_champ_points.keys():
+        if x in MIDDLE:
+            result[0] += player_champ_points[x]
+        elif x in TOP:
+            result[1] += player_champ_points[x]
+        elif x in BOTTOM:
+            result[2] += player_champ_points[x]
+        elif x in JUNGLE:
+            result[3] += player_champ_points[x]
+        elif x in SUPPORT:
+            result[4] += player_champ_points[x]
+    maxPoint = 0
+    for x in range(5):
+        maxPoint = max(maxPoint, result[x])
+    preference = -1
+    for x in range(5):
+        if maxPoint == result[x]:
+            preference = x
+            break
+    if preference == 0:
+        result[5] = "middle lane"
+    elif preference == 1:
+        result[5] = "top lane"
+    elif preference == 2:
+        result[5] = "bottom lane"
+    elif preference == 3:
+        result[5] = "jungle lane"
+    elif preference == 4:
+        result[5] = "support"
+    return result
+
 
 
 # most familiar 5 champs
@@ -260,18 +264,17 @@ def make_suggestions(lane):
 
     # now we have three recommended champs
     string = 'The recommended champions for you are: \n'
+    print 
     for champ in champ_select_suggestions.keys():
         lis.append(str(champion_names[champ]))
         lis.append((str)((round)(win_rates[champ] * 100, 1)) + "%")
         lis.append(str(player_champ_points[champ]))
         string += (str)(champion_names[champ]) + ", average winrate: " +(str)((round)(win_rates[champ] * 100, 1)) + "%, "\
         "your current champion mastery is: " + str(player_champ_points[champ]) + '\n'
-    string += "Give a shot!"
     for champ in aram_champ_select_suggestions.keys():
         aram_lis.append(str(champion_names[champ]))
         aram_lis.append((str)((round)(aram_win_rates[champ] * 100, 1)) + "%")
         aram_lis.append(str(player_champ_points[champ]))
-    print string
     return (lis, aram_lis)
     
 @app.route('/')
@@ -291,6 +294,8 @@ def show_result():
             global aram_champ_select_suggestions
             global aram_top_10_win_rate_champs
             global player_champ_points
+            global pointsList
+            pointsList = []
             player_champ_points = {}
             top_10_win_rate_champs = {}
             aram_top_10_win_rate_champs = {}
@@ -298,7 +303,7 @@ def show_result():
             top_5_champ_names = []
             champ_select_suggestions = {}
             aram_champ_select_suggestions = {}
-            # load_data()
+            load_data()
             playerName = request.form.get('playerName')
             player_name = ''
             for x in playerName.split():
@@ -306,9 +311,10 @@ def show_result():
             playerName = player_name
 
             playerID = get_player_id(playerName)
-            get_top_5_champs(playerID)
+            pointsList = get_top_5_champs(playerID)
+            lane = pointsList[5]
             top_5_list = get_champion_names()
-            lane = get_lane_of_the_player()
+
             lis, aram_lis = make_suggestions(lane)
             champs = champ_select_suggestions.keys()
             aram_champs = aram_champ_select_suggestions.keys()
@@ -318,9 +324,9 @@ def show_result():
                 name_with_space += (x + '+')
             name_with_space = name_with_space[:-1]
             playerName = get_player_name(playerID)
-            return render_template('result.html', player_name=playerName, name_with_space=name_with_space, champs=champs,aram_champs=aram_champs, lane=lane,lis=lis, aram_lis = aram_lis,top_5_list=top_5_list)
+            return render_template('result.html', player_name=playerName, name_with_space=name_with_space, champs=champs,aram_champs=aram_champs, lane=lane,lis=lis, pointsList=pointsList, aram_lis = aram_lis,top_5_list=top_5_list)
         except:
-            return "Wrong player name, please try again!"
+            return "wrong name, please input the correct name!"
 
 if __name__ == '__main__':
     app.run(debug=True,port=5080)
