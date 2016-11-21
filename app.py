@@ -31,7 +31,6 @@ aram_mid_win_rates = {}
 aram_bot_win_rates = {}
 aram_jug_win_rates = {}
 aram_sup_win_rates = {}
-pointsList = []
 
 # top 10 for that lane
 top_10_win_rate_champs = {}
@@ -294,8 +293,7 @@ def show_result():
             global aram_champ_select_suggestions
             global aram_top_10_win_rate_champs
             global player_champ_points
-            global pointsList
-            pointsList = []
+           
             player_champ_points = {}
             top_10_win_rate_champs = {}
             aram_top_10_win_rate_champs = {}
