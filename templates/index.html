@@ -17,23 +17,43 @@
             background-color: #FFFFF0;
             padding-top: 0px;
         }
+
         p {
             font-family: verdana;
             font-size: 100%;
         }
+
         div {
             font-size: 100%;
         }
+
         h1 {
             color: #1ad1ff;
             text-align: center;
             font-size: Georgia;
         }
+<<<<<<< HEAD
         div {
             height:75%;
             width:75%;
         }
     </style>
+=======
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+        }
+
+        div {
+            height: 80%;
+            width: 80%;
+        }
+    </style>
+
+
+>>>>>>> origin/master
 </head>
 <body>
 
@@ -47,6 +67,12 @@
     <input type="submit" name="Search" value="Search" class="btn btn-success"></input>
 </form>
 
+<<<<<<< HEAD
+
+<div class="container">
+    <div>
+        <canvas id="top_10_pick_champs_Chart"></canvas>
+=======
 
 <div class="container">
     <div>
@@ -65,6 +91,112 @@
 </div>
 <div class="container">
     <div>
+        <canvas id="bot_10_winrate_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="top_10_firstBloodKill_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="bot_10_firstBloodKill_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="top_10_firstInhibitorKill_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="bot_10_firstInhibitorKill_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="top_10_firstTowerKill_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="bot_10_firstTowerKill_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="top_10_kills_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="bot_10_kills_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="top_10_towerKills_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="bot_10_towerKills_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="top_10_tripleKills_champs_Chart"></canvas>
+>>>>>>> origin/master
+    </div>
+</div>
+
+<div class="container">
+    <div>
+<<<<<<< HEAD
+        <canvas id="bot_10_pick_champs_Chart"></canvas>
+=======
+        <canvas id="bot_10_tripleKills_champs_Chart"></canvas>
+>>>>>>> origin/master
+    </div>
+</div>
+
+<div class="container">
+    <div>
+<<<<<<< HEAD
+        <canvas id="top_10_winrate_champs_Chart"></canvas>
+=======
+        <canvas id="top_10_quadraKills_champs_Chart"></canvas>
+>>>>>>> origin/master
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="bot_10_quadraKills_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <canvas id="top_10_pentaKills_champs_Chart"></canvas>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+<<<<<<< HEAD
         <canvas id="bot_10_winrate_champs_Chart"></canvas>
     </div>
 </div>
@@ -183,6 +315,27 @@
     <p class="muted credit"> Analysis performed and visualization developed by <a href="mailto:yl3791@nyu.edu" target="_top">Yang Xiong</a>, <a href="mailto:yx988@nyu.edu" target="_top">Yiwei Liu</a> and <a href="mailto:qw559@nyu.edu" target="_top">Qingyun Wu</a></p>
   </div>
 </div>
+=======
+        <canvas id="bot_10_pentaKills_champs_Chart"></canvas>
+    </div>
+</div>
+
+
+<div class="container" style="width:60%">
+    <div>
+        <canvas id="gamePie"></canvas>
+    </div>
+</div>
+<br><br><br><br><br>
+<div class="container" style="width:60%">
+    <div>
+        <canvas id="winPie"></canvas>
+    </div>
+</div>
+
+</body>
+</html>
+>>>>>>> origin/master
 <script type="text/javascript">
     var ctx1 = document.getElementById("top_10_pick_champs_Chart");
     var ctx2 = document.getElementById("bot_10_pick_champs_Chart");
@@ -190,6 +343,10 @@
     var ctx4 = document.getElementById("bot_10_winrate_champs_Chart");
     var ctx5 = document.getElementById("gamePie");
     var ctx6 = document.getElementById("winPie");
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
     var ctx7 = document.getElementById("top_10_firstBloodKill_champs_Chart");
     var ctx8 = document.getElementById("bot_10_firstBloodKill_champs_Chart");
     var ctx9 = document.getElementById("top_10_firstInhibitorKill_champs_Chart");
@@ -206,6 +363,10 @@
     var ctx20 = document.getElementById("bot_10_quadraKills_champs_Chart");
     var ctx21 = document.getElementById("top_10_pentaKills_champs_Chart");
     var ctx22 = document.getElementById("bot_10_pentaKills_champs_Chart");
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx1, {
         type: 'bar',
         data: {
@@ -228,6 +389,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right',
             },
@@ -235,6 +400,10 @@
                 display: true,
                 text: 'Highest 10 Pick Rate Champions'
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         }
     });
     var randomColorGenerator = function () {
@@ -263,6 +432,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right',
             },
@@ -270,6 +443,10 @@
                 display: true,
                 text: 'Lowest 10 Pick Rate Champions'
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         }
     });
     var myBarChart = new Chart(ctx3, {
@@ -295,6 +472,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right',
             },
@@ -302,6 +483,10 @@
                 display: true,
                 text: 'Highest 10 Win Rate Champions'
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         }
     });
     var myBarChart = new Chart(ctx4, {
@@ -327,6 +512,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right',
             },
@@ -334,6 +523,10 @@
                 display: true,
                 text: 'Lowest 10 Win Rate Champions'
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         }
     });
     var gamePie = new Chart(ctx5, {
@@ -368,6 +561,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right',
             },
@@ -375,6 +572,10 @@
                 display: true,
                 text: 'Gmae Type Distribution'
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         }
     });
     var WinPie = new Chart(ctx6, {
@@ -383,10 +584,18 @@
                 data: [
                     50.95,
                     49.05
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
                 ],
                 backgroundColor: [
                     "#00BFFF",
                     "#8B008B"
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
                 ],
                 label: 'win rate of two sides' // for legend
             }],
@@ -403,6 +612,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right',
             },
@@ -410,6 +623,7 @@
                 display: true,
                 text: 'Win Rate of Two Teams'
             }
+<<<<<<< HEAD
         }
     });
     var myBarChart = new Chart(ctx7, {
@@ -664,6 +878,288 @@
             }
         }
     });
+=======
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx7, {
+        type: 'bar',
+        data: {
+            labels: ['LeeSin', 'Jhin', 'Yasuo', 'Ezreal', 'Caitlyn', 'Teemo', 'Jinx', 'Vayne', 'Lucian', 'MissFortune'],
+            datasets: [
+                {
+                    label: "champion first blood kill rate (0.01%)",
+                    fill: false,
+                    backgroundColor: "rgba(255,51,51,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    data: [346, 317, 278, 233, 211, 182, 180, 179, 164, 163],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Highest 10 First Blood Kill Champions'
+            }
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx8, {
+        type: 'bar',
+        data: {
+            labels: ['Galio', 'Taric', 'Skarner', 'RekSai', 'Urgot', 'Rammus', 'Karthus', 'Warwick', 'Azir', 'Lissandra'],
+            datasets: [
+                {
+                    label: "champion first blood kill rate (0.01%)",
+                    fill: false,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: randomColorGenerator(),
+                    borderJoinStyle: 'miter',
+                    data: [8, 12, 13, 14, 14, 15, 16, 16, 20, 21],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Lowest 10 First Blood Kill Champions'
+            }
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx9, {
+        type: 'bar',
+        data: {
+            labels: ['Jinx', 'Ashe', 'Caitlyn', 'Jhin', 'MissFortune', 'Ezreal', 'Vayne', 'Yasuo', 'Lucian', 'LeeSin'],
+            datasets: [
+                {
+                    label: "champion first inhibitor kill rate (0.01%)",
+                    fill: false,
+                    backgroundColor: "rgba(255,51,51,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    data: [305, 265, 246, 246, 203, 201, 181, 159, 152, 144],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Highest 10 First Inhibitor Kill Champions'
+            }
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx10, {
+        type: 'bar',
+        data: {
+            labels: ['Urgot', 'Taliyah', 'RekSai', 'Karthus', 'Taric', 'Sejuani', 'Gragas', 'Shen', 'Maokai', 'Galio'],
+            datasets: [
+                {
+                    label: "champion first inhibitor kill rate (0.01%)",
+                    fill: false,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: randomColorGenerator(),
+                    borderJoinStyle: 'miter',
+                    data: [10, 10, 11, 11, 11, 12, 12, 12, 13, 13],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Lowest 10 First Inhibitor Kill Champions'
+            }
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx11, {
+        type: 'bar',
+        data: {
+            labels: ['Jinx', 'Caitlyn', 'Jhin', 'MissFortune', 'Yasuo', 'Lucian', 'Ashe', 'Ezreal', 'Draven', 'Vayne'],
+            datasets: [
+                {
+                    label: "champion first tower kill rate (0.01%)",
+                    fill: false,
+                    backgroundColor: "rgba(255,51,51,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    data: [313, 306, 285, 217, 211, 206, 206, 168, 157, 152],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Highest 10 First Tower Kill Champions'
+            }
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx12, {
+        type: 'bar',
+        data: {
+            labels: ['RekSai', 'Skarner', 'Galio', 'Karthus', 'Sejuani', 'Rammus', 'Taric', 'Gragas', 'Shen', 'Urgot'],
+            datasets: [
+                {
+                    label: "champion first tower kill rate (0.01%)",
+                    fill: false,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: randomColorGenerator(),
+                    borderJoinStyle: 'miter',
+                    data: [7, 8, 9, 10, 10, 10, 10, 10, 11, 12],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Lowest 10 First Tower Kill Champions'
+            }
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx13, {
+        type: 'bar',
+        data: {
+            labels: ['Jhin', 'LeeSin', 'Ezreal', 'Jinx', 'Vayne', 'Caitlyn', 'Yasuo', 'MissFortune', 'Lucian', 'Ashe'],
+            datasets: [
+                {
+                    label: "champion kills rate (%)",
+                    fill: false,
+                    backgroundColor: "rgba(255,51,51,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    data: [202, 181, 160, 149, 147, 146, 140, 137, 114, 113],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Highest 10 Kills Champions'
+            }
+
+        }
+    });
+
+    var myBarChart = new Chart(ctx14, {
+        type: 'bar',
+        data: {
+            labels: ['Taric', 'RekSai', 'Urgot', 'Galio', 'Skarner', 'Aatrox', 'Janna', 'Soraka', 'Braum', 'Mordekaiser'],
+            datasets: [
+                {
+                    label: "champion kills rate (%)",
+                    fill: false,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: randomColorGenerator(),
+                    borderJoinStyle: 'miter',
+                    data: [7, 9, 9, 10, 10, 12, 12, 13, 13, 13],
+                    spanGaps: false
+                }
+            ]
+        },
+        options: {
+            elements: {
+                rectangle: {
+                    borderWidth: 2
+                }
+            },
+            responsive: true,
+
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: 'Lowest 10 Kills Champions'
+            }
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx15, {
         type: 'bar',
         data: {
@@ -686,6 +1182,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -693,8 +1193,15 @@
                 display: true,
                 text: 'Highest 10 Tower Kills Champions'
             }
+<<<<<<< HEAD
         }
     });
+=======
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx16, {
         type: 'bar',
         data: {
@@ -718,6 +1225,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -725,8 +1236,15 @@
                 display: true,
                 text: 'Lowest 10 Tower Kills Champions'
             }
+<<<<<<< HEAD
         }
     });
+=======
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx17, {
         type: 'bar',
         data: {
@@ -749,6 +1267,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -756,8 +1278,15 @@
                 display: true,
                 text: 'Highest 10 Triple Kills Champions'
             }
+<<<<<<< HEAD
         }
     });
+=======
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx18, {
         type: 'bar',
         data: {
@@ -781,6 +1310,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -788,8 +1321,15 @@
                 display: true,
                 text: 'Lowest 10 Triple Kills Champions'
             }
+<<<<<<< HEAD
         }
     });
+=======
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx19, {
         type: 'bar',
         data: {
@@ -812,6 +1352,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -819,8 +1363,15 @@
                 display: true,
                 text: 'Highest 10 Quadra Kills Champions'
             }
+<<<<<<< HEAD
         }
     });
+=======
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx20, {
         type: 'bar',
         data: {
@@ -844,6 +1395,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -851,8 +1406,15 @@
                 display: true,
                 text: 'Lowest 10 Quadra Kills Champions'
             }
+<<<<<<< HEAD
         }
     });
+=======
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx21, {
         type: 'bar',
         data: {
@@ -875,6 +1437,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -882,8 +1448,15 @@
                 display: true,
                 text: 'Highest 10 Penta Kills Champions'
             }
+<<<<<<< HEAD
         }
     });
+=======
+
+        }
+    });
+
+>>>>>>> origin/master
     var myBarChart = new Chart(ctx22, {
         type: 'bar',
         data: {
@@ -907,6 +1480,10 @@
                 }
             },
             responsive: true,
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
             legend: {
                 position: 'right'
             },
@@ -914,6 +1491,10 @@
                 display: true,
                 text: 'Lowest 10 Penta Kills Champions'
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
         }
     });
 </script>
