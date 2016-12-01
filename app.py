@@ -1,14 +1,26 @@
+
+'''
+this script is to make champion selection suggestions for the player_name the user input
+The average champion points, champion winrate and 5 champion lanes are derived from our data source:
+champion mastery, game, and match; applied Hadoop to process the data and get static results for the
+base of suggestions.
+
+For the user input palyer_name, we use official API from Riot to get the player's ID and champion mastery
+for champions he or she has played, and do the analysis combined with our static results from Hadoop.
+Firstly we calculate the player's total champion points for every lane to determine which lane the player
+is most inclined to play. For that lane, we get 10 highest winrate champion from our champion lists, compare
+it with average champion mastery for each champion, we can get 3 suggested champions for the player.
+
+Notice that, there is an assumption in our analysis, which is that if a champion have both high winrate and low
+average champion mastery(points), it means that the player will spend less time to practice and be good
+at that champion, which will increase the player's overall winrate in the end.
+'''
 from flask import render_template, request, Flask
-import time
 import urllib2
-import traceback
-app = Flask(__name__, static_url_path='/static/')
-# this script is to pick 5 top champions of the specific player from the master_clean dataset
-# compare the 5 champs with the 4 lists, derive the main lane of the player
 from collections import OrderedDict
 import json
-import argparse
-import random
+app = Flask(__name__, static_url_path='/static/')
+
 
 # list of tuples(champID, mastery)
 top_5_champs = []
@@ -98,10 +110,10 @@ def get_player_name(playerID):
             name = content[str(playerID)]
             return name
     except:
-        return 'StupidYou'
+        return 'failed to get the player name'
 
 def get_player_id(playerName):
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/{}?api_key=RGAPI-55787ebf-c932-4185-8a30-da566a0d0ce6".format(playerName)
+    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/{}?api_key=RGAPI-c1d4a63a-8a02-4e0b-891f-bd8c3c9f6431".format(playerName)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -293,7 +305,6 @@ def show_result():
             global aram_champ_select_suggestions
             global aram_top_10_win_rate_champs
             global player_champ_points
-           
             player_champ_points = {}
             top_10_win_rate_champs = {}
             aram_top_10_win_rate_champs = {}
