@@ -1,17 +1,18 @@
 
 '''
-this script is to make champion selection suggestions for the player_name the user input
-The average champion points, champion winrate and 5 champion lanes are derived from our data source:
-champion mastery, game, and match; applied Hadoop to process the data and get static results for the
+This program is mainly to make champion selection suggestions for the player_name the user input
+The average champion points, champion winrate and 5 champion lanes are derived from our 14 GB data source:
+champion mastery, game and match; applied Hadoop to process the data and get static results for the
 base of suggestions.
 
 For the user input palyer_name, we use official API from Riot to get the player's ID and champion mastery
 for champions he or she has played, and do the analysis combined with our static results from Hadoop.
+
 Firstly we calculate the player's total champion points for every lane to determine which lane the player
 is most inclined to play. For that lane, we get 10 highest winrate champion from our champion lists, compare
 it with average champion mastery for each champion, we can get 3 suggested champions for the player.
 
-Notice that, there is an assumption in our analysis, which is that if a champion have both high winrate and low
+Notice that, there is an assumption in our analysis, which is that if a champion has both high winrate and low
 average champion mastery(points), it means that the player will spend less time to practice and be good
 at that champion, which will increase the player's overall winrate in the end.
 '''
