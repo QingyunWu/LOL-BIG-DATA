@@ -29,41 +29,46 @@ missed = 0
 #     for every in content:
 #         posts.insert_one(every)
 
-def fetchData(line, index):
+def fetchData(file, index):
     global added, bad, missed
-    url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key={}".format(line[:-1], keys[index])
-    try:
-        data = urllib2.urlopen(url, timeout=12)
-        statusCode = data.getcode()
-        if statusCode == 200:
-            page = data.read()
-            content = json.loads(page)
-            for every in content:
-                posts.insert_one(every)
-            added += 1
-            print "added: " + line[: -1] + "  total: " + str(added)
-            fcollected.write(line)
-        else:
-            bad += 1
+
+    while True:
+        line = file.readline()
+        if not line:
+            return
+
+        url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key={}".format(line[:-1], keys[index])
+        try:
+            data = urllib2.urlopen(url, timeout=12)
+            statusCode = data.getcode()
+            if statusCode == 200:
+                page = data.read()
+                content = json.loads(page)
+                for every in content:
+                    posts.insert_one(every)
+                added += 1
+                print "added: " + line[: -1] + "  total: " + str(added)
+                fcollected.write(line)
+            else:
+                bad += 1
+                print "                                     " \
+                      "                                     " \
+                      "bad: " + line[: -1] + "  total: " + str(bad)
+                fmissed.write(line)
+
+        except:
+            missed += 1
             print "                                     " \
-                  "                                     " \
-                  "bad: " + line[: -1] + "  total: " + str(bad)
+                  "missed " + line[: -1] + "  total: " + str(missed)
             fmissed.write(line)
+        finally:
+            time.sleep(1.5)
 
-    except:
-        missed += 1
-        print "                                     " \
-              "missed " + line[: -1] + "  total: " + str(missed)
-        fmissed.write(line)
-
+# start 5 threads, each thread will fetch one record every 1.5 second
 try:
-    while 1:
-        for index in range(5):
-            time.sleep(0.3)
-            line = f.readline()
-            if not line:
-                break
-            thread.start_new_thread(fetchData, (line, index))
+    for index in range(5):
+        time.sleep(0.3)
+        thread.start_new_thread(fetchData, (f, index))
 finally:
     f.close()
     fcollected.close()
