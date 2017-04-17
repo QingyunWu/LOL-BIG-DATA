@@ -1,0 +1,108 @@
+
+*{
+	padding:0;
+	margin:0;
+}
+
+body{
+	font-family: "Ubuntu", sans-serif;
+	font-size: 300%;
+	background:#f8f8f8;
+}
+
+a{
+	text-decoration: none;
+	color:#666;
+}
+	a:hover{
+		color:#999;
+	}
+p{
+	line-height: 2em;
+	margin:0 0 20px;
+	text-align: center;
+}
+
+.wrap{
+	max-width: 1200px;
+	margin:10px auto;
+	height:100%;
+	width:100%;
+	margin-left: 20px;
+	font-size: 150%;
+}
+.page-header{
+	text-align: center;
+}
+
+.type-wrap{
+	padding:55px;
+	background:#f0f0f0;
+	border-radius:5px;
+	border:#CCC 1px solid;
+	text-align: left;
+}
+
+
+
+body {
+		background-color: #FFFFF0;
+		padding-top: 0px;
+}
+p {
+		font-family: verdana;
+		font-size: 100%;
+}
+
+h1 {
+		color: #1ad1ff;
+		text-align: center;
+		font-size: Georgia;
+}
+div {
+		height:75%;
+		width:75%;
+		font-size: 100%;
+}
+
+
+.typed-cursor{
+		opacity: 1;
+		font-weight: 100;
+		-webkit-animation: blink 0.7s infinite;
+		-moz-animation: blink 0.7s infinite;
+		-ms-animation: blink 0.7s infinite;
+		-o-animation: blink 0.7s infinite;
+		animation: blink 0.7s infinite;
+}
+@-keyframes blink{
+		0% { opacity:1; }
+		50% { opacity:0; }
+		100% { opacity:1; }
+}
+@-webkit-keyframes blink{
+		0% { opacity:1; }
+		50% { opacity:0; }
+		100% { opacity:1; }
+}
+@-moz-keyframes blink{
+		0% { opacity:1; }
+		50% { opacity:0; }
+		100% { opacity:1; }
+}
+@-ms-keyframes blink{
+		0% { opacity:1; }
+		50% { opacity:0; }
+		100% { opacity:1; }
+}
+@-o-keyframes blink{
+		0% { opacity:1; }
+		50% { opacity:0; }
+		100% { opacity:1; }
+}
+
+.typed-fade-out{
+		opacity: 0;
+		animation: 0;
+		transition: opacity .25s;
+}

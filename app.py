@@ -16,18 +16,18 @@ Notice that, there is an assumption in our analysis, which is that if a champion
 average champion mastery(points), it means that the player will spend less time to practice and be good
 at that champion, which will increase the player's overall winrate in the end.
 '''
-from flask import render_template, request, Flask
+from flask import render_template, request, Flask, json
 import urllib2
 from collections import OrderedDict
-import json
 app = Flask(__name__, static_url_path='/static/')
+
 
 
 # list of tuples(champID, mastery)
 top_5_champs = []
 top_5_champ_names = []
 
-# hadoop to get average win_rate and champ_points for every champ ID
+# applied Hadoop to get average win_rate and champ_points for every champ ID
 win_rates = {}
 aram_win_rates = {}
 champ_points = {}
@@ -58,7 +58,7 @@ BOTTOM =[15, 18, 21, 22, 29, 51, 67, 81, 119, 202, 222, 236, 429]
 MIDDLE = [1, 3, 4, 6, 7, 8, 9, 10, 13, 26, 30, 31, 34, 38, 42, 45, 50, 55, 61, 63, 69, 74, 84, 90, 91, 96, 99, 101, 103, 105, 110, 112, 115, 127, 131, 134, 136, 157, 161, 163, 238, 245, 268]
 SUPPORT = [12, 16, 25, 37, 40, 43, 44, 53, 89, 111, 117, 143, 201, 223, 267, 412, 432]
 
-# this kind of data only loads once            
+# this kind of data only loads once
 def load_data():
     with open('champions_title.json', 'r') as title_file:
         title_data = json.load(title_file)
@@ -146,7 +146,7 @@ def get_top_5_champs(playerID):
             top_5_champs.append(x)
         index += 1
     # make a list here, 0-5 means mid, top, bot, jug, sup, preference
-    result = [0,0,0,0,0,"whatever"]    
+    result = [0,0,0,0,0,"whatever"]
     for x in player_champ_points.keys():
         if x in MIDDLE:
             result[0] += player_champ_points[x]
@@ -276,7 +276,7 @@ def make_suggestions(lane):
 
     # now we have three recommended champs
     string = 'The recommended champions for you are: \n'
-    print 
+    print
     for champ in champ_select_suggestions.keys():
         lis.append(str(champion_names[champ]))
         lis.append((str)((round)(win_rates[champ] * 100, 1)) + "%")
@@ -288,7 +288,7 @@ def make_suggestions(lane):
         aram_lis.append((str)((round)(aram_win_rates[champ] * 100, 1)) + "%")
         aram_lis.append(str(player_champ_points[champ]))
     return (lis, aram_lis)
-    
+
 @app.route('/')
 def index():
     load_data()
