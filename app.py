@@ -16,10 +16,9 @@ Notice that, there is an assumption in our analysis, which is that if a champion
 average champion mastery(points), it means that the player will spend less time to practice and be good
 at that champion, which will increase the player's overall winrate in the end.
 '''
-from flask import render_template, request, Flask
+from flask import render_template, request, Flask, json
 import urllib2
 from collections import OrderedDict
-import json
 app = Flask(__name__, static_url_path='/static/')
 
 
@@ -28,7 +27,7 @@ app = Flask(__name__, static_url_path='/static/')
 top_5_champs = []
 top_5_champ_names = []
 
-# hadoop to get average win_rate and champ_points for every champ ID
+# applied Hadoop to get average win_rate and champ_points for every champ ID
 win_rates = {}
 aram_win_rates = {}
 champ_points = {}
@@ -339,5 +338,5 @@ def show_result():
         except:
             return "wrong name, please input the correct name!"
 
-# if __name__ == '__main__':
-#     app.run(debug=True,port=5080)
+if __name__ == '__main__':
+    app.run(debug=True,port=5080)
