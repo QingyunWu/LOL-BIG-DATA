@@ -18,6 +18,7 @@ at that champion, which will increase the player's overall winrate in the end.
 '''
 from flask import render_template, request, Flask, json
 import urllib2
+import os
 import redis
 from collections import OrderedDict
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -59,7 +60,12 @@ BOTTOM =[15, 18, 21, 22, 29, 51, 67, 81, 119, 202, 222, 236, 429]
 MIDDLE = [1, 3, 4, 6, 7, 8, 9, 10, 13, 26, 30, 31, 34, 38, 42, 45, 50, 55, 61, 63, 69, 74, 84, 90, 91, 96, 99, 101, 103, 105, 110, 112, 115, 127, 131, 134, 136, 157, 161, 163, 238, 245, 268]
 SUPPORT = [12, 16, 25, 37, 40, 43, 44, 53, 89, 111, 117, 143, 201, 223, 267, 412, 432]
 
+<<<<<<< HEAD
 redis_channel = redis.Redis(host='REDISTOGO_URL')
+=======
+redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+redis_channel = redis.from_url(redis_url)
+>>>>>>> master
 redis_channel.set("visit:times", 0)
 
 # this kind of data only loads once
