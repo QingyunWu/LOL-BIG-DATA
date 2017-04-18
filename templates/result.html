@@ -47,7 +47,8 @@
     <input type="text" name="playerName" placeholder="name"></input>
     <input type="submit" name="Search" value="Search" class="btn btn-success"></input>
   </form>
-  <h3>search times since last deployment: {{search_times}}</h3>
+  <h3>search times in last 30 mins: <span style="color:red">{{search_times}}</span></h3>
+  <h3>last search in history: <span style="color:red">{{last_search_time}}</span></h3>
 
 
 
