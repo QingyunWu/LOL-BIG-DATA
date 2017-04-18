@@ -18,8 +18,10 @@ at that champion, which will increase the player's overall winrate in the end.
 '''
 from flask import render_template, request, Flask, json
 import urllib2
-import os
 import redis
+import os
+import sqlite3
+import datetime
 from collections import OrderedDict
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -60,14 +62,12 @@ BOTTOM =[15, 18, 21, 22, 29, 51, 67, 81, 119, 202, 222, 236, 429]
 MIDDLE = [1, 3, 4, 6, 7, 8, 9, 10, 13, 26, 30, 31, 34, 38, 42, 45, 50, 55, 61, 63, 69, 74, 84, 90, 91, 96, 99, 101, 103, 105, 110, 112, 115, 127, 131, 134, 136, 157, 161, 163, 238, 245, 268]
 SUPPORT = [12, 16, 25, 37, 40, 43, 44, 53, 89, 111, 117, 143, 201, 223, 267, 412, 432]
 
-<<<<<<< HEAD
-redis_channel = redis.Redis(host='REDISTOGO_URL')
-=======
+
+
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
 redis_channel = redis.from_url(redis_url)
->>>>>>> master
-redis_channel.set("visit:times", 0)
 
+redis_channel.set("visit:times", 0)
 # this kind of data only loads once
 def load_data():
     with open('champions_title.json', 'r') as title_file:
@@ -299,6 +299,18 @@ def make_suggestions(lane):
         aram_lis.append(str(player_champ_points[champ]))
     return (lis, aram_lis)
 
+# create database before app first created
+@app.before_first_request
+def create_tables():
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+    # INTEGER for auto increment id
+    create_table = "CREATE TABLE IF NOT EXISTS lastdates (lastdate datetime)"
+    cursor.execute(create_table)
+    cursor.close()
+    conn.commit()
+    conn.close()
+
 @app.route('/')
 def index():
     load_data()
@@ -309,6 +321,21 @@ def show_result():
     # increse the search times in history
     redis_channel.incr("visit:times")
     times = redis_channel.get("visit:times")
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+    # fetchone() return a tuple
+    last_search_time = cursor.execute('SELECT * FROM lastdates ORDER BY lastdate DESC LIMIT 1').fetchone()
+    if not last_search_time:
+        last_search_time = "This is the first search"
+    else:
+        last_search_time = last_search_time[0]
+    print last_search_time
+    now = datetime.datetime.now()
+    cursor.execute('''INSERT INTO lastdates VALUES(?)''', (now,))
+
+    cursor.close()
+    conn.commit()
+    conn.close()
     if request.form.get('Search',None) == 'Search':
         # make these global, so we can change the value everywhere
         try:
@@ -348,7 +375,7 @@ def show_result():
             name_with_space = name_with_space[:-1]
             playerName = get_player_name(playerID)
 
-            return render_template('result.html', search_times = times, player_name=playerName, name_with_space=name_with_space, champs=champs,aram_champs=aram_champs, lane=lane,lis=lis, pointsList=pointsList, aram_lis = aram_lis,top_5_list=top_5_list)
+            return render_template('result.html',last_search_time=last_search_time, search_times = times, player_name=playerName, name_with_space=name_with_space, champs=champs,aram_champs=aram_champs, lane=lane,lis=lis, pointsList=pointsList, aram_lis = aram_lis,top_5_list=top_5_list)
         except:
             return "wrong name, please input the correct name!"
 
