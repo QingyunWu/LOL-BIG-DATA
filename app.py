@@ -59,7 +59,7 @@ BOTTOM =[15, 18, 21, 22, 29, 51, 67, 81, 119, 202, 222, 236, 429]
 MIDDLE = [1, 3, 4, 6, 7, 8, 9, 10, 13, 26, 30, 31, 34, 38, 42, 45, 50, 55, 61, 63, 69, 74, 84, 90, 91, 96, 99, 101, 103, 105, 110, 112, 115, 127, 131, 134, 136, 157, 161, 163, 238, 245, 268]
 SUPPORT = [12, 16, 25, 37, 40, 43, 44, 53, 89, 111, 117, 143, 201, 223, 267, 412, 432]
 
-redis_channel = redis.Redis(host='redis://redistogo:0174b2c21ec85ad682ff4aefec9a2918@crestfish.redistogo.com:9484/', port=6379, db=0)
+redis_channel = redis.Redis(host='redis://redistogo:0174b2c21ec85ad682ff4aefec9a2918@crestfish.redistogo.com:9484/')
 redis_channel.set("visit:times", 0)
 
 # this kind of data only loads once
