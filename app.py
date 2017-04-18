@@ -18,9 +18,10 @@ at that champion, which will increase the player's overall winrate in the end.
 '''
 from flask import render_template, request, Flask, json
 import urllib2
+import urlparse
 import redis
 import os
-import sqlite3
+import psycopg2
 import datetime
 from collections import OrderedDict
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -111,7 +112,7 @@ def load_data():
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
 def get_player_name(playerID):
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/{}/name?api_key=RGAPI-bed8d7c5-334d-40b5-8807-5fa186553d2c".format((str)(playerID))
+    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/{}/name?api_key=RGAPI-c1d4a63a-8a02-4e0b-891f-bd8c3c9f6431".format((str)(playerID))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -138,7 +139,7 @@ def get_player_id(playerName):
 
 
 def get_top_5_champs(playerID):
-    url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key=RGAPI-947ba119-a421-421d-9f9c-3699d5bb938e".format(playerID)
+    url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key=RGAPI-bed8d7c5-334d-40b5-8807-5fa186553d2c".format(playerID)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -302,13 +303,20 @@ def make_suggestions(lane):
 # create database before app first created
 @app.before_first_request
 def create_tables():
-    conn = sqlite3.connect('data.db')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='???')
+    urlparse.uses_netloc.append("postgres")
+    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
     cursor = conn.cursor()
-    # INTEGER for auto increment id
-    create_table = "CREATE TABLE IF NOT EXISTS lastdates (lastdate datetime)"
-    cursor.execute(create_table)
-    cursor.close()
+    cursor.execute("CREATE TABLE IF NOT EXISTS lastdates (lastdate timestamp)")
     conn.commit()
+    cursor.close()
     conn.close()
 
 @app.route('/')
@@ -321,19 +329,28 @@ def show_result():
     # increse the search times in history
     redis_channel.incr("visit:times")
     times = redis_channel.get("visit:times")
-    conn = sqlite3.connect('data.db')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='???')
+    urlparse.uses_netloc.append("postgres")
+    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
     cursor = conn.cursor()
+    # in postgreSQL, cursor.execute() wont return anything! not like sqlite3!
+    cursor.execute("SELECT * FROM lastdates ORDER BY lastdate DESC LIMIT 1")
     # fetchone() return a tuple
-    last_search_time = cursor.execute('SELECT * FROM lastdates ORDER BY lastdate DESC LIMIT 1').fetchone()
+    last_search_time = cursor.fetchone()
     if not last_search_time:
         last_search_time = "This is the first search"
     else:
         last_search_time = last_search_time[0]
-    print last_search_time
-    now = datetime.datetime.now()
-    cursor.execute('''INSERT INTO lastdates VALUES(?)''', (now,))
 
-    cursor.close()
+    now = datetime.datetime.today()
+    cursor.execute("INSERT INTO lastdates VALUES (%s);", (now, ))
     conn.commit()
     conn.close()
     if request.form.get('Search',None) == 'Search':
@@ -362,7 +379,10 @@ def show_result():
 
             playerID = get_player_id(playerName)
             pointsList = get_top_5_champs(playerID)
+            print pointsList
             lane = pointsList[5]
+
+
             top_5_list = get_champion_names()
 
             lis, aram_lis = make_suggestions(lane)
@@ -375,7 +395,14 @@ def show_result():
             name_with_space = name_with_space[:-1]
             playerName = get_player_name(playerID)
 
-            return render_template('result.html',last_search_time=last_search_time, search_times = times, player_name=playerName, name_with_space=name_with_space, champs=champs,aram_champs=aram_champs, lane=lane,lis=lis, pointsList=pointsList, aram_lis = aram_lis,top_5_list=top_5_list)
+            return render_template('result.html',\
+                last_search_time=last_search_time, \
+                search_times = times, \
+                player_name=playerName, \
+                name_with_space=name_with_space, \
+                champs=champs,aram_champs=aram_champs, \
+                lane=lane,lis=lis, pointsList=pointsList, \
+                aram_lis = aram_lis,top_5_list=top_5_list)
         except:
             return "wrong name, please input the correct name!"
 

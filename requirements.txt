@@ -1,3 +1,4 @@
 Flask==0.10.1
 redis==2.10.5
+psycopg2==2.7.1
 uwsgi
