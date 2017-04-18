@@ -1,232 +1,224 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LOL Bigdata Analysis</title>
-    <link rel="icon" href="{{ url_for('static', filename = 'images/icon.png') }}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-     <style>
-        body {
-            background-color: #FFFFF0;
-            padding-top: 5px;
-        }
-        p {
-            font-family: verdana;
-            font-size: 100%;
-        }
-        div {
-            font-size: 100%;
-        }
-        h1 {
-            color: #1ad1ff;
-            text-align: center;
-            font-size: Georgia;
-        }
-        div {
-            height:75%;
-            width:75%;
-        }
-    </style>
-</head>
-<body>
-<form action="/result" method="post">
-                        <span class="glyphicon glyphicon-user"></span>
-                        <input type="text" name="playerName" placeholder="name"></input>
-                        <input type="submit" name="Search" value="Search" class="btn btn-success"></input>
-</form>
-<!-- <div style="width:800px;">
-<div style="float: left; width: 250px"> 
-<form action="/result" method="post">
-                        <span class="glyphicon glyphicon-user"></span>
-                        <input type="text" name="playerName" placeholder="name"></input>
-              <input type="submit" name="Search" value="Search" class="btn btn-success"></input>
-</form>
-</div>
-<div style="float: right; width: 250px"> 
-    <form action="/">
-              <input type="submit"  value="Back" class="btn btn-info"></input>
-</form>
-</div>
-</div> -->
-
-
-
-<h1 ><a href="http://na.op.gg/summoner/userName={{name_with_space}}">Hello! {{player_name}}</a></h1>
-<p>
-<strong>You are most familiar with these five champions:</strong>
-</p>
-<div class="container">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Champion</th>
-        <th>Title</th>
-        <th>Your Champion Points</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[0].lower()}}/">{{top_5_list[0]}}</a></td>
-        <td>{{top_5_list[1]}}</td>
-        <td>{{top_5_list[2]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[3].lower()}}/">{{top_5_list[3]}}</a></td>
-        <td>{{top_5_list[4]}}</td>
-        <td>{{top_5_list[5]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[6].lower()}}/">{{top_5_list[6]}}</a></td>
-        <td>{{top_5_list[7]}}</td>
-        <td>{{top_5_list[8]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[9].lower()}}/">{{top_5_list[9]}}</a></td>
-        <td>{{top_5_list[10]}}</td>
-        <td>{{top_5_list[11]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[12].lower()}}/">{{top_5_list[12]}}</a></td>
-        <td>{{top_5_list[13]}}</td>
-        <td>{{top_5_list[14]}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="container">
-  <div>
-    <canvas id="radar"></canvas>
-  </div>
-</div>
-<div class="alert alert-success">
-     From our analysis, you are a <strong>{{lane}}</strong> player!
-</div>
-<p>
-<strong>The recommended champions for you in Rank Games are:</strong>
-</p>
-<div class="container">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Champion</th>
-        <th>Average Winrate</th>
-        <th>Your Champion Points</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{lis[0].lower()}}/">{{lis[0]}}</a></td>
-        <td>{{lis[1]}}</td>
-        <td>{{lis[2]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{lis[3].lower()}}/">{{lis[3]}}</a></td>
-        <td>{{lis[4]}}</td>
-        <td>{{lis[5]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{lis[6].lower()}}/">{{lis[6]}}</a></td>
-        <td>{{lis[7]}}</td>
-        <td>{{lis[8]}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
-<img src="{{ url_for('static', filename = 'images/%s.jpg' %champs[0]) }}" width="405" height="239" class="img-rounded" alt="previous" title="1" border="2">
-<img src="{{ url_for('static', filename = 'images/%s.jpg' %champs[1]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
-<img src="{{ url_for('static', filename = 'images/%s.jpg' %champs[2]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
-<br>
-<br>
-<p>
-<strong>The recommended champions for you in ARAM Games are:</strong>
-</p>
-<div class="container">
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Champion</th>
-        <th>Average Winrate</th>
-        <th>Your Champion Points</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{aram_lis[0].lower()}}/">{{aram_lis[0]}}</a></td>
-        <td>{{aram_lis[1]}}</td>
-        <td>{{aram_lis[2]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{aram_lis[3].lower()}}/">{{aram_lis[3]}}</a></td>
-        <td>{{aram_lis[4]}}</td>
-        <td>{{aram_lis[5]}}</td>
-      </tr>
-      <tr>
-        <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{aram_lis[6].lower()}}/">{{aram_lis[6]}}</a></td>
-        <td>{{aram_lis[7]}}</td>
-        <td>{{aram_lis[8]}}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[0]) }}" width="405" height="239" class="img-rounded" alt="previous" title="1" border="2">
-<img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[1]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
-<img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[2]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
-<br><br>
-<script type="text/javascript">
-  var list = "{{ pointsList[0]}}"
-
-  var ctx5 = document.getElementById("radar");
-
-  var myRadarChart = new Chart(ctx5, {
-    type: 'radar',
-    data: {
-    labels: ["MIDDLE", "TOP",  "BOT", "JUNGLE", "SUPPORT"],
-    datasets: [
-        {
-            label: "Lane Champion Points",
-            backgroundColor: "rgba(255,51,51,0.6)",
-            borderColor: "rgba(179,181,198,1)",
-            pointBackgroundColor: "rgba(179,181,198,1)",
-            pointBorderColor: "#fff",
-            pointHoverBackgroundColor: "#fff",
-            pointHoverBorderColor: "rgba(179,181,198,1)",
-            data: ["{{ pointsList[0]}}", "{{ pointsList[1]}}", "{{ pointsList[2]}}", "{{ pointsList[3]}}", "{{ pointsList[4]}}"]
-        }
-    ]
-},
-
-    options: {
-    elements: {
-        rectangle: {
-            borderWidth: 2,
-        }
-    },
-    responsive: true,
-
-    legend: {
-        position: 'right',
-    },
-    title: {
-        display: true,
-        text: 'Lane Preference'
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LOL Bigdata Analysis</title>
+  <link rel="icon" href="{{ url_for('static', filename = 'images/icon.png') }}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <style>
+    body {
+      background-color: #FFFFF0;
+      padding-top: 5px;
     }
 
-}
-});
-</script>
-<div id="footer">
+    p {
+      font-family: verdana;
+      font-size: 100%;
+    }
+
+    div {
+      font-size: 100%;
+    }
+
+    h1 {
+      color: #1ad1ff;
+      text-align: center;
+      font-size: Georgia;
+    }
+
+    div {
+      height: 75%;
+      width: 75%;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="/result" method="post">
+    <span class="glyphicon glyphicon-user"></span>
+    <input type="text" name="playerName" placeholder="name"></input>
+    <input type="submit" name="Search" value="Search" class="btn btn-success"></input>
+  </form>
+  <h3>search times since last deployment: {{search_times}}</h3>
+
+
+
+  <h1><a target="_blank" href="http://na.op.gg/summoner/userName={{name_with_space}}">Hello! {{player_name}}</a></h1>
+  <p>
+    <strong>You are most familiar with these five champions:</strong>
+  </p>
   <div class="container">
-    <p class="muted credit"> Analysis performed and visualization developed by <a href="mailto:yl3791@nyu.edu" target="_top">Yang Xiong</a>, <a href="mailto:yx988@nyu.edu" target="_top">Yiwei Liu</a> and <a href="mailto:qw559@nyu.edu" target="_top">Qingyun Wu</a></p>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Champion</th>
+          <th>Title</th>
+          <th>Your Champion Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[0].lower()}}/">{{top_5_list[0]}}</a></td>
+          <td>{{top_5_list[1]}}</td>
+          <td>{{top_5_list[2]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[3].lower()}}/">{{top_5_list[3]}}</a></td>
+          <td>{{top_5_list[4]}}</td>
+          <td>{{top_5_list[5]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[6].lower()}}/">{{top_5_list[6]}}</a></td>
+          <td>{{top_5_list[7]}}</td>
+          <td>{{top_5_list[8]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[9].lower()}}/">{{top_5_list[9]}}</a></td>
+          <td>{{top_5_list[10]}}</td>
+          <td>{{top_5_list[11]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{top_5_list[12].lower()}}/">{{top_5_list[12]}}</a></td>
+          <td>{{top_5_list[13]}}</td>
+          <td>{{top_5_list[14]}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</div>
+  <div class="container">
+    <div>
+      <canvas id="radar"></canvas>
+    </div>
+  </div>
+  <div class="alert alert-success">
+    From our analysis, you are a <strong>{{lane}}</strong> player!
+  </div>
+  <p>
+    <strong>The recommended champions for you in Rank Games are:</strong>
+  </p>
+  <div class="container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Champion</th>
+          <th>Average Winrate</th>
+          <th>Your Champion Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{lis[0].lower()}}/">{{lis[0]}}</a></td>
+          <td>{{lis[1]}}</td>
+          <td>{{lis[2]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{lis[3].lower()}}/">{{lis[3]}}</a></td>
+          <td>{{lis[4]}}</td>
+          <td>{{lis[5]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{lis[6].lower()}}/">{{lis[6]}}</a></td>
+          <td>{{lis[7]}}</td>
+          <td>{{lis[8]}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <img src="{{ url_for('static', filename = 'images/%s.jpg' %champs[0]) }}" width="405" height="239" class="img-rounded" alt="previous" title="1" border="2">
+  <img src="{{ url_for('static', filename = 'images/%s.jpg' %champs[1]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
+  <img src="{{ url_for('static', filename = 'images/%s.jpg' %champs[2]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
+  <br>
+  <br>
+  <p>
+    <strong>The recommended champions for you in ARAM Games are:</strong>
+  </p>
+  <div class="container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Champion</th>
+          <th>Average Winrate</th>
+          <th>Your Champion Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{aram_lis[0].lower()}}/">{{aram_lis[0]}}</a></td>
+          <td>{{aram_lis[1]}}</td>
+          <td>{{aram_lis[2]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank" href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{aram_lis[3].lower()}}/">{{aram_lis[3]}}</a></td>
+          <td>{{aram_lis[4]}}</td>
+          <td>{{aram_lis[5]}}</td>
+        </tr>
+        <tr>
+          <td><a target="_blank"href="http://gameinfo.na.leagueoflegends.com/en/game-info/champions/{{aram_lis[6].lower()}}/">{{aram_lis[6]}}</a></td>
+          <td>{{aram_lis[7]}}</td>
+          <td>{{aram_lis[8]}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[0]) }}" width="405" height="239" class="img-rounded" alt="previous" title="1" border="2">
+  <img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[1]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
+  <img src="{{ url_for('static', filename = 'images/%s.jpg' %aram_champs[2]) }}" width="405" height="239" class="img-rounded" alt="previous" title="2" border="2">
+  <br><br>
+  <script type="text/javascript">
+    var list = "{{ pointsList[0]}}"
+
+    var ctx5 = document.getElementById("radar");
+
+    var myRadarChart = new Chart(ctx5, {
+      type: 'radar',
+      data: {
+        labels: ["MIDDLE", "TOP", "BOT", "JUNGLE", "SUPPORT"],
+        datasets: [{
+          label: "Lane Champion Points",
+          backgroundColor: "rgba(255,51,51,0.6)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(179,181,198,1)",
+          data: ["{{ pointsList[0]}}", "{{ pointsList[1]}}", "{{ pointsList[2]}}", "{{ pointsList[3]}}", "{{ pointsList[4]}}"]
+        }]
+      },
+
+      options: {
+        elements: {
+          rectangle: {
+            borderWidth: 2,
+          }
+        },
+        responsive: true,
+
+        legend: {
+          position: 'right',
+        },
+        title: {
+          display: true,
+          text: 'Lane Preference'
+        }
+
+      }
+    });
+  </script>
+  <div id="footer">
+    <div class="container">
+      <p class="muted credit"> Analysis performed and visualization developed by <a href="mailto:yl3791@nyu.edu" target="_top">Yang Xiong</a>, <a href="mailto:yx988@nyu.edu" target="_top">Yiwei Liu</a> and <a href="mailto:qw559@nyu.edu" target="_top">Qingyun Wu</a></p>
+    </div>
+  </div>
 </body>
+
 </html>
