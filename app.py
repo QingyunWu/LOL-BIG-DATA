@@ -66,9 +66,9 @@ SUPPORT = [12, 16, 25, 37, 40, 43, 44, 53, 89, 111, 117, 143, 201, 223, 267, 412
 
 
 redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-redis_channel = redis.from_url(redis_url)
+r = redis.from_url(redis_url)
 
-redis_channel.set("visit:times", 0)
+r.set("visit:times", 0)
 # this kind of data only loads once
 def load_data():
     with open('champions_title.json', 'r') as title_file:
@@ -327,9 +327,9 @@ def index():
 @app.route('/result', methods = ['POST'])
 def show_result():
     # increse the search times in history
-    redis_channel.incr("visit:times")
-    times = redis_channel.get("visit:times")
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='???')
+    r.incr("visit:times")
+    times = r.get("visit:times")
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='???@')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
@@ -342,15 +342,13 @@ def show_result():
     cursor = conn.cursor()
     # in postgreSQL, cursor.execute() wont return anything! not like sqlite3!
     cursor.execute("SELECT * FROM lastdates ORDER BY lastdate DESC LIMIT 1")
-    # fetchone() return a tuple
-    last_search_time = cursor.fetchone()
-    if not last_search_time:
-        last_search_time = "This is the first search"
-    else:
-        last_search_time = last_search_time[0]
-
+    # fetchone() return a tuple, if no results, if last_search_time_result will be false
+    last_search_time_result = cursor.fetchone()
+    last_search_time = last_search_time_result[0] if last_search_time_result else "This is the first search"
     now = datetime.datetime.today()
     cursor.execute("INSERT INTO lastdates VALUES (%s);", (now, ))
+    cursor.execute("SELECT COUNT(*) from lastdates")
+    total_search_times = cursor.fetchone()[0]
     conn.commit()
     conn.close()
     if request.form.get('Search',None) == 'Search':
@@ -379,9 +377,7 @@ def show_result():
 
             playerID = get_player_id(playerName)
             pointsList = get_top_5_champs(playerID)
-            print pointsList
             lane = pointsList[5]
-
 
             top_5_list = get_champion_names()
 
@@ -395,16 +391,18 @@ def show_result():
             name_with_space = name_with_space[:-1]
             playerName = get_player_name(playerID)
 
-            return render_template('result.html',\
-                last_search_time=last_search_time, \
-                search_times = times, \
-                player_name=playerName, \
-                name_with_space=name_with_space, \
-                champs=champs,aram_champs=aram_champs, \
-                lane=lane,lis=lis, pointsList=pointsList, \
-                aram_lis = aram_lis,top_5_list=top_5_list)
+            return render_template('result.html',
+                last_search_time=last_search_time,
+                search_times = times,
+                player_name=playerName,
+                name_with_space=name_with_space,
+                champs=champs,aram_champs=aram_champs,
+                lane=lane,lis=lis, pointsList=pointsList,
+                aram_lis=aram_lis,top_5_list=top_5_list,
+                total_search_times=total_search_times)
         except:
             return "wrong name, please input the correct name!"
 
+# run from localhost
 if __name__ == '__main__':
     app.run(debug=True,port=5080)
