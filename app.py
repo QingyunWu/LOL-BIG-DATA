@@ -303,7 +303,7 @@ def make_suggestions(lane):
 # create database before app first created
 @app.before_first_request
 def create_tables():
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='???')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='?@')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
@@ -329,7 +329,7 @@ def show_result():
     # increse the search times in history
     r.incr("visit:times")
     times = r.get("visit:times")
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='???@')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='W011@')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
