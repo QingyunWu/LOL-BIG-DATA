@@ -112,34 +112,34 @@ def load_data():
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
 def get_player_name(playerID):
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/{}/name?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format((str)(playerID))
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format((str)(playerID))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
         if statusCode == 200:
             page = data.read()
             content = json.loads(page)
-            name = content[str(playerID)]
+            name = content['id']
             return name
     except:
         return 'failed to get the player name'
 
 def get_player_id(playerName):
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerName)
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerName)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
         if statusCode == 200:
             page = data.read()
             content = json.loads(page)
-            id = content[playerName.lower()]["id"]
+            id = content["id"]
             return id
     except:
         return 'Wrong name!'
 
 
 def get_top_5_champs(playerID):
-    url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerID)
+    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerID)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
