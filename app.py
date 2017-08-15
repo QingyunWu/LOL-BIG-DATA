@@ -112,7 +112,7 @@ def load_data():
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
 def get_player_name(playerID):
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/{}/name?api_key=RGAPI-c1d4a63a-8a02-4e0b-891f-bd8c3c9f6431".format((str)(playerID))
+    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/{}/name?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format((str)(playerID))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -125,7 +125,7 @@ def get_player_name(playerID):
         return 'failed to get the player name'
 
 def get_player_id(playerName):
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/{}?api_key=RGAPI-c1d4a63a-8a02-4e0b-891f-bd8c3c9f6431".format(playerName)
+    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerName)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -139,7 +139,7 @@ def get_player_id(playerName):
 
 
 def get_top_5_champs(playerID):
-    url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key=RGAPI-bed8d7c5-334d-40b5-8807-5fa186553d2c".format(playerID)
+    url = "https://na.api.pvp.net/championmastery/location/NA1/player/{}/champions?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerID)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
