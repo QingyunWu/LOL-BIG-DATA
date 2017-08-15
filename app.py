@@ -132,7 +132,7 @@ def get_player_id(playerName):
         if statusCode == 200:
             page = data.read()
             content = json.loads(page)
-            id = content["id"]
+            id = content['name']
             return id
     except:
         return 'Wrong name!'
@@ -353,55 +353,52 @@ def show_result():
     conn.close()
     if request.form.get('Search',None) == 'Search':
         # make these global, so we can change the value everywhere
-        try:
-            global top_5_champ_names
-            global champ_select_suggestions
-            global top_5_champs
-            global top_10_win_rate_champs
-            global aram_champ_select_suggestions
-            global aram_top_10_win_rate_champs
-            global player_champ_points
-            player_champ_points = {}
-            top_10_win_rate_champs = {}
-            aram_top_10_win_rate_champs = {}
-            top_5_champs = []
-            top_5_champ_names = []
-            champ_select_suggestions = {}
-            aram_champ_select_suggestions = {}
-            load_data()
-            playerName = request.form.get('playerName')
-            player_name = ''
-            for x in playerName.split():
-                player_name += x
-            playerName = player_name
+        global top_5_champ_names
+        global champ_select_suggestions
+        global top_5_champs
+        global top_10_win_rate_champs
+        global aram_champ_select_suggestions
+        global aram_top_10_win_rate_champs
+        global player_champ_points
+        player_champ_points = {}
+        top_10_win_rate_champs = {}
+        aram_top_10_win_rate_champs = {}
+        top_5_champs = []
+        top_5_champ_names = []
+        champ_select_suggestions = {}
+        aram_champ_select_suggestions = {}
+        load_data()
+        playerName = request.form.get('playerName')
+        player_name = ''
+        for x in playerName.split():
+            player_name += x
+        playerName = player_name
 
-            playerID = get_player_id(playerName)
-            pointsList = get_top_5_champs(playerID)
-            lane = pointsList[5]
+        playerID = get_player_id(playerName)
+        pointsList = get_top_5_champs(playerID)
+        lane = pointsList[5]
 
-            top_5_list = get_champion_names()
+        top_5_list = get_champion_names()
 
-            lis, aram_lis = make_suggestions(lane)
-            champs = champ_select_suggestions.keys()
-            aram_champs = aram_champ_select_suggestions.keys()
-            player_name_list = playerName.split()
-            name_with_space = ''
-            for x in player_name_list:
-                name_with_space += (x + '+')
-            name_with_space = name_with_space[:-1]
-            playerName = get_player_name(playerID)
+        lis, aram_lis = make_suggestions(lane)
+        champs = champ_select_suggestions.keys()
+        aram_champs = aram_champ_select_suggestions.keys()
+        player_name_list = playerName.split()
+        name_with_space = ''
+        for x in player_name_list:
+            name_with_space += (x + '+')
+        name_with_space = name_with_space[:-1]
+        playerName = get_player_name(playerID)
 
-            return render_template('result.html',
-                last_search_time=last_search_time,
-                search_times = times,
-                player_name=playerName,
-                name_with_space=name_with_space,
-                champs=champs,aram_champs=aram_champs,
-                lane=lane,lis=lis, pointsList=pointsList,
-                aram_lis=aram_lis,top_5_list=top_5_list,
-                total_search_times=total_search_times)
-        except:
-            return "wrong name, please input the correct name!"
+        return render_template('result.html',
+            last_search_time=last_search_time,
+            search_times = times,
+            player_name=playerName,
+            name_with_space=name_with_space,
+            champs=champs,aram_champs=aram_champs,
+            lane=lane,lis=lis, pointsList=pointsList,
+            aram_lis=aram_lis,top_5_list=top_5_list,
+            total_search_times=total_search_times)
 
 # run from localhost
 if __name__ == '__main__':
