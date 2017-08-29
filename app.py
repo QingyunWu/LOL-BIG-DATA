@@ -1,6 +1,6 @@
 
 '''
-This program is mainly to make champion selection suggestions for the player_name the user input
+This program is developed to make champion selection suggestions for the player_name the user input
 The average champion points, champion winrate and 5 champion lanes are derived from our 14 GB data source:
 champion mastery, game and match; applied Hadoop to process the data and get static results for the
 base of suggestions.
@@ -304,7 +304,8 @@ def make_suggestions(lane):
 # create database before app first created
 @app.before_first_request
 def create_tables():
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='011@')
+    # local setup below:
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='...2011@')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
@@ -325,12 +326,16 @@ def index():
     load_data()
     return render_template('index.html')
 
+@app.route('/riot.txt')
+def riot_auth():
+    return render_template('riot.txt')
+
 @app.route('/result', methods = ['POST'])
 def show_result():
     # increse the search times in history
     r.incr("visit:times")
     times = r.get("visit:times")
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='...2011@')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
