@@ -113,7 +113,7 @@ def load_data():
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
 def get_player_name(playerID):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key={}}".format(str(playerID), config.api_key)
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key={}".format(str(playerID), str(os.getenv('RIOT_API')))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -126,7 +126,7 @@ def get_player_name(playerID):
         return 'failed to get the player name'
 
 def get_player_id(playerName):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key={}}".format(playerName, config.api_key)
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key={}".format(playerName, str(os.getenv('RIOT_API')))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -140,7 +140,7 @@ def get_player_id(playerName):
 
 
 def get_top_5_champs(playerID):
-    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key={}}".format(playerID, config.api_key)
+    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key={}".format(playerID, str(os.getenv('RIOT_API')))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
