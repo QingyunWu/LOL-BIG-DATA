@@ -112,7 +112,7 @@ def load_data():
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
 def get_player_name(playerID):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format((str)(playerID))
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key=RGAPI-811aab72-9378-4da9-a2cc-620d874db8f7".format((str)(playerID))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -125,7 +125,7 @@ def get_player_name(playerID):
         return 'failed to get the player name'
 
 def get_player_id(playerName):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerName)
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key=RGAPI-811aab72-9378-4da9-a2cc-620d874db8f7".format(playerName)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -139,7 +139,7 @@ def get_player_id(playerName):
 
 
 def get_top_5_champs(playerID):
-    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerID)
+    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key=RGAPI-811aab72-9378-4da9-a2cc-620d874db8f7".format(playerID)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -303,7 +303,7 @@ def make_suggestions(lane):
 # create database before app first created
 @app.before_first_request
 def create_tables():
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='?@')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='011@')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
@@ -329,7 +329,7 @@ def show_result():
     # increse the search times in history
     r.incr("visit:times")
     times = r.get("visit:times")
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='W011@')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
@@ -353,55 +353,54 @@ def show_result():
     conn.close()
     if request.form.get('Search',None) == 'Search':
         # make these global, so we can change the value everywhere
-        try:
-            global top_5_champ_names
-            global champ_select_suggestions
-            global top_5_champs
-            global top_10_win_rate_champs
-            global aram_champ_select_suggestions
-            global aram_top_10_win_rate_champs
-            global player_champ_points
-            player_champ_points = {}
-            top_10_win_rate_champs = {}
-            aram_top_10_win_rate_champs = {}
-            top_5_champs = []
-            top_5_champ_names = []
-            champ_select_suggestions = {}
-            aram_champ_select_suggestions = {}
-            load_data()
-            playerName = request.form.get('playerName')
-            player_name = ''
-            for x in playerName.split():
-                player_name += x
-            playerName = player_name
+        global top_5_champ_names
+        global champ_select_suggestions
+        global top_5_champs
+        global top_10_win_rate_champs
+        global aram_champ_select_suggestions
+        global aram_top_10_win_rate_champs
+        global player_champ_points
+        player_champ_points = {}
+        top_10_win_rate_champs = {}
+        aram_top_10_win_rate_champs = {}
+        top_5_champs = []
+        top_5_champ_names = []
+        champ_select_suggestions = {}
+        aram_champ_select_suggestions = {}
+        load_data()
+        playerName = request.form.get('playerName')
+        player_name = ''
+        for x in playerName.split():
+            player_name += x
+        playerName = player_name
 
-            playerID = get_player_id(playerName)
-            pointsList = get_top_5_champs(playerID)
-            lane = pointsList[5]
+        playerID = get_player_id(playerName)
+        pointsList = get_top_5_champs(playerID)
+      
+        lane = pointsList[5]
 
-            top_5_list = get_champion_names()
+        top_5_list = get_champion_names()
 
-            lis, aram_lis = make_suggestions(lane)
-            champs = champ_select_suggestions.keys()
-            aram_champs = aram_champ_select_suggestions.keys()
-            player_name_list = playerName.split()
-            name_with_space = ''
-            for x in player_name_list:
-                name_with_space += (x + '+')
-            name_with_space = name_with_space[:-1]
-            playerName = get_player_name(playerID)
+        lis, aram_lis = make_suggestions(lane)
+        champs = champ_select_suggestions.keys()
+        aram_champs = aram_champ_select_suggestions.keys()
+        player_name_list = playerName.split()
+        name_with_space = ''
+        for x in player_name_list:
+            name_with_space += (x + '+')
+        name_with_space = name_with_space[:-1]
+        playerName = get_player_name(playerID)
 
-            return render_template('result.html',
-                last_search_time=last_search_time,
-                search_times = times,
-                player_name=playerName,
-                name_with_space=name_with_space,
-                champs=champs,aram_champs=aram_champs,
-                lane=lane,lis=lis, pointsList=pointsList,
-                aram_lis=aram_lis,top_5_list=top_5_list,
-                total_search_times=total_search_times)
-            except:
-                return "wrong input, please input the correct name"
+        return render_template('result.html',
+            last_search_time=last_search_time,
+            search_times = times,
+            player_name=playerName,
+            name_with_space=name_with_space,
+            champs=champs,aram_champs=aram_champs,
+            lane=lane,lis=lis, pointsList=pointsList,
+            aram_lis=aram_lis,top_5_list=top_5_list,
+            total_search_times=total_search_times)
+        
 
 # run from localhost
 if __name__ == '__main__':
