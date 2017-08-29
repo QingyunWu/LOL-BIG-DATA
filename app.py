@@ -21,6 +21,7 @@ import urllib2
 import urlparse
 import redis
 import os
+import config
 import psycopg2
 import datetime
 from collections import OrderedDict
@@ -112,7 +113,7 @@ def load_data():
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
 def get_player_name(playerID):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key={}}".format(str(playerID), str(os.getenv('RIOT_API', 'api_key')))
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key={}}".format(str(playerID), config.api_key)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -125,7 +126,7 @@ def get_player_name(playerID):
         return 'failed to get the player name'
 
 def get_player_id(playerName):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key={}}".format(playerName, str(os.getenv('RIOT_API', 'api_key')))
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key={}}".format(playerName, config.api_key)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -139,7 +140,7 @@ def get_player_id(playerName):
 
 
 def get_top_5_champs(playerID):
-    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key={}}".format(playerID, str(os.getenv('RIOT_API', 'api_key')))
+    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key={}}".format(playerID, config.api_key)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -352,54 +353,57 @@ def show_result():
     conn.commit()
     conn.close()
     if request.form.get('Search',None) == 'Search':
+        try:
         # make these global, so we can change the value everywhere
-        global top_5_champ_names
-        global champ_select_suggestions
-        global top_5_champs
-        global top_10_win_rate_champs
-        global aram_champ_select_suggestions
-        global aram_top_10_win_rate_champs
-        global player_champ_points
-        player_champ_points = {}
-        top_10_win_rate_champs = {}
-        aram_top_10_win_rate_champs = {}
-        top_5_champs = []
-        top_5_champ_names = []
-        champ_select_suggestions = {}
-        aram_champ_select_suggestions = {}
-        load_data()
-        playerName = request.form.get('playerName')
-        player_name = ''
-        for x in playerName.split():
-            player_name += x
-        playerName = player_name
+            global top_5_champ_names
+            global champ_select_suggestions
+            global top_5_champs
+            global top_10_win_rate_champs
+            global aram_champ_select_suggestions
+            global aram_top_10_win_rate_champs
+            global player_champ_points
+            player_champ_points = {}
+            top_10_win_rate_champs = {}
+            aram_top_10_win_rate_champs = {}
+            top_5_champs = []
+            top_5_champ_names = []
+            champ_select_suggestions = {}
+            aram_champ_select_suggestions = {}
+            load_data()
+            playerName = request.form.get('playerName')
+            player_name = ''
+            for x in playerName.split():
+                player_name += x
+            playerName = player_name
 
-        playerID = get_player_id(playerName)
-        pointsList = get_top_5_champs(playerID)
-      
-        lane = pointsList[5]
+            playerID = get_player_id(playerName)
+            pointsList = get_top_5_champs(playerID)
+          
+            lane = pointsList[5]
 
-        top_5_list = get_champion_names()
+            top_5_list = get_champion_names()
 
-        lis, aram_lis = make_suggestions(lane)
-        champs = champ_select_suggestions.keys()
-        aram_champs = aram_champ_select_suggestions.keys()
-        player_name_list = playerName.split()
-        name_with_space = ''
-        for x in player_name_list:
-            name_with_space += (x + '+')
-        name_with_space = name_with_space[:-1]
-        playerName = get_player_name(playerID)
+            lis, aram_lis = make_suggestions(lane)
+            champs = champ_select_suggestions.keys()
+            aram_champs = aram_champ_select_suggestions.keys()
+            player_name_list = playerName.split()
+            name_with_space = ''
+            for x in player_name_list:
+                name_with_space += (x + '+')
+            name_with_space = name_with_space[:-1]
+            playerName = get_player_name(playerID)
 
-        return render_template('result.html',
-            last_search_time=last_search_time,
-            search_times = times,
-            player_name=playerName,
-            name_with_space=name_with_space,
-            champs=champs,aram_champs=aram_champs,
-            lane=lane,lis=lis, pointsList=pointsList,
-            aram_lis=aram_lis,top_5_list=top_5_list,
-            total_search_times=total_search_times)
+            return render_template('result.html',
+                last_search_time=last_search_time,
+                search_times = times,
+                player_name=playerName,
+                name_with_space=name_with_space,
+                champs=champs,aram_champs=aram_champs,
+                lane=lane,lis=lis, pointsList=pointsList,
+                aram_lis=aram_lis,top_5_list=top_5_list,
+                total_search_times=total_search_times)
+        except:
+            return "Wrong input, please input correct name!"
         
 
 # run from localhost
