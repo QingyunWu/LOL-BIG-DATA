@@ -112,34 +112,34 @@ def load_data():
             aram_sup_win_rates[champ] = aram_win_rates[champ]
 
 def get_player_name(playerID):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format((str)(playerID))
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/{}?api_key=RGAPI-811aab72-9378-4da9-a2cc-620d874db8f7".format((str)(playerID))
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
         if statusCode == 200:
             page = data.read()
             content = json.loads(page)
-            name = content['id']
+            name = content['name']
             return name
     except:
         return 'failed to get the player name'
 
 def get_player_id(playerName):
-    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerName)
+    url = "https://na1.api.riotgames.com/lol/summoner/v3/summoners/by-name/{}?api_key=RGAPI-811aab72-9378-4da9-a2cc-620d874db8f7".format(playerName)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
         if statusCode == 200:
             page = data.read()
             content = json.loads(page)
-            id = content['name']
+            id = content["id"]
             return id
     except:
         return 'Wrong name!'
 
 
 def get_top_5_champs(playerID):
-    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key=RGAPI-f51b492d-9343-4c2f-a705-89b67a8872ba".format(playerID)
+    url = "https://na1.api.riotgames.com/lol/champion-mastery/v3/champion-masteries/by-summoner/{}?api_key=RGAPI-811aab72-9378-4da9-a2cc-620d874db8f7".format(playerID)
     try:
         data = urllib2.urlopen(url, timeout=12)
         statusCode = data.getcode()
@@ -303,7 +303,7 @@ def make_suggestions(lane):
 # create database before app first created
 @app.before_first_request
 def create_tables():
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='?@')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='011@')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
@@ -329,7 +329,7 @@ def show_result():
     # increse the search times in history
     r.incr("visit:times")
     times = r.get("visit:times")
-    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='W011@')
+    # conn = psycopg2.connect(dbname='postgres', user='postgres', host='localhost', password='')
     urlparse.uses_netloc.append("postgres")
     url = urlparse.urlparse(os.environ["DATABASE_URL"])
     conn = psycopg2.connect(
@@ -376,6 +376,7 @@ def show_result():
 
         playerID = get_player_id(playerName)
         pointsList = get_top_5_champs(playerID)
+      
         lane = pointsList[5]
 
         top_5_list = get_champion_names()
@@ -399,6 +400,7 @@ def show_result():
             lane=lane,lis=lis, pointsList=pointsList,
             aram_lis=aram_lis,top_5_list=top_5_list,
             total_search_times=total_search_times)
+        
 
 # run from localhost
 if __name__ == '__main__':
